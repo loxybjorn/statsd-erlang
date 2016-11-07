@@ -262,7 +262,7 @@ use_env_or_default(Name, DefaultValue, Args) ->
 %% @end
 -spec get_env(atom(), any()) -> any().
 get_env(Name, DefaultValue) ->
-  case application:get_env(statsderl, Name) of
+  case application:get_env(?APPLICATION, Name) of
     {ok, Value} -> Value;
     undefined   -> DefaultValue
   end.
