@@ -267,7 +267,7 @@ get_env(Name, DefaultValue) ->
 
 -spec make_udp_header(string(), integer()) -> binary().
 make_udp_header(Hostname, Port) ->
-  {A, B, C, D} = lookup_hostname(Hostname),
+  {A, B, C, D} = resolve_hostname(Hostname),
   Tag = case is_otp_19_or_later() of
           true  -> 1; % see macro INET_AF_INET in kernel/src/inet_int.hrl
           false -> []
@@ -288,10 +288,10 @@ is_otp_19_or_later() ->
     _         -> true
   end.
 
-lookup_hostname(Address) when is_tuple(Address) ->
+resolve_hostname(Address) when is_tuple(Address) ->
   Address;
-lookup_hostname(Hostname) ->
-  case inet:getaddr(Hostname) of
+resolve_hostname(Hostname) ->
+  case inet:getaddr(Hostname, inet) of
     {ok, Address} -> Address;
     _Else         -> {127, 0, 0, 1}
   end.
