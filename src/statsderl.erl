@@ -151,7 +151,8 @@ init(Args) ->
                 },
   {ok, State, statsderl_packet:get_timeout(Packet)}.
 
-handle_call(_Request, _From, State) ->
+handle_call(Call, From, State) ->
+  gen_server:reply(From, {error, {unexpected_call, Call}}),
   noreply(State).
 
 handle_cast({send, Line}, State) ->
@@ -262,10 +263,7 @@ use_env_or_default(Name, DefaultValue, Args) ->
 %% @end
 -spec get_env(atom(), any()) -> any().
 get_env(Name, DefaultValue) ->
-  case application:get_env(?APPLICATION, Name) of
-    {ok, Value} -> Value;
-    undefined   -> DefaultValue
-  end.
+  application:get_env(?APPLICATION, Name, DefaultValue).
 
 -spec make_udp_header(string(), integer()) -> binary().
 make_udp_header(Hostname, Port) ->
@@ -293,11 +291,9 @@ is_otp_19_or_later() ->
 lookup_hostname(Address) when is_tuple(Address) ->
   Address;
 lookup_hostname(Hostname) ->
-  case inet:gethostbyname(Hostname) of
-    {ok, {_, _, _, _, _, [Address | _]}} ->
-      Address;
-    _Else ->
-      {127, 0, 0, 1}
+  case inet:getaddr(Hostname) of
+    {ok, Address} -> Address;
+    _Else         -> {127, 0, 0, 1}
   end.
 
 %% @private Return a random in range [0, 1000]
