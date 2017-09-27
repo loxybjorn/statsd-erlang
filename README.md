@@ -5,11 +5,7 @@ It's purpose is to contain changes to make it work with [statsite](https://githu
 
 Changes:
 
-* Renamed project from statsderl to `statsd_erlang` (API modules names are not changed)
-* Removed pooling
-* Allow starting worker linked to caller (under any supervision tree)
-* Added batch report API for callers
-* Added timeout based buffer for UDP packets batching
+* Messages are terminated by a line feed character (0xA).
 
 ## Examples
 
