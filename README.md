@@ -1,6 +1,7 @@
 # StatsD Erlang client
 
-This is a heavy-rewrite fork of upstream [statsderl](https://github.com/lpgauth/statsderl), base version: 0.4.7.
+This is a fork of upstream [statsd-erlang](https://github.com/klarna/statsd-erlang).
+It's purpose is to contain changes to make it work with [statsite](https://github.com/statsite/statsite).
 
 Changes:
 

@@ -205,9 +205,12 @@ get_base_key(name) ->
 get_base_key(Key) ->
   [Key, $.].
 
+%% ASCII value for Line Feed.
+lf_char() -> 10.
+
 format_sample_rate(1) -> [];
 format_sample_rate(SampleRate) ->
-  ["|@", float_to_list(SampleRate, [{decimals, 3}])].
+  ["|@", float_to_list(SampleRate, [{decimals, 3}]), lf_char()].
 
 new_line(Type, Key, Value, SampleRate) when is_number(Value) ->
   ValueStr =
@@ -221,7 +224,7 @@ new_line(increment, Key, Value, SampleRate) ->
 new_line(timing, Key, Value, SampleRate) ->
   [Key, <<":">>, Value, <<"|ms">> | format_sample_rate(SampleRate)];
 new_line(gauge, Key, Value, _SampleRate) ->
-  [Key, <<":">>, Value, <<"|g">>].
+  [Key, <<":">>, Value, <<"|g">>, lf_char()].
 
 eval_by_rate(Rate, _Fun) when Rate =< 0 -> ok;
 eval_by_rate(Rate,  Fun) when Rate >= 1 -> Fun();
